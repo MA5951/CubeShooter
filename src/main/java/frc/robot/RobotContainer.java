@@ -11,7 +11,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.SetPower;
-import frc.robot.subsystems.Cubeshotter;
+import frc.robot.subsystems.CubeShooter.Cubeshotter;
+import frc.robot.subsystems.CubeShooter.Constants;
 
 
 /**
@@ -40,8 +41,8 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    ps4Controller.circle().whileTrue(new MotorCommand(Cubeshotter.getInstance(), 1, 0));
-    ps4Controller.triangle().whileTrue(new MotorCommand(Cubeshotter.getInstance(), -1, -0));
+    ps4Controller.circle().whileTrue(new MotorCommand(Cubeshotter.getInstance(), Constants.HighFiringPower, 0));
+    ps4Controller.triangle().whileTrue(new MotorCommand(Cubeshotter.getInstance(), Constants.IntakePower, 0));
   }
 
   /**
