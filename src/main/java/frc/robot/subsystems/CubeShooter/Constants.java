@@ -1,8 +1,8 @@
-package frc.robot.subsystem.CubeShooter;
+package frc.robot.subsystems.CubeShooter;
 
 
 
-public class Condtants {
+public class Constants {
 
     public static final double LowFiringPower = 0.8;
     public static final double HighFiringPower = 1;
