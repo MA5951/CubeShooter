@@ -40,8 +40,8 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    ps4Controller.circle().whileTrue(new MotorCommand(Cubeshotter.getInstance(), 1, 1));
-    ps4Controller.triangle().whileTrue(new MotorCommand(Cubeshotter.getInstance(), -1, -1));
+    ps4Controller.circle().whileTrue(new MotorCommand(Cubeshotter.getInstance(), 1, 0));
+    ps4Controller.triangle().whileTrue(new MotorCommand(Cubeshotter.getInstance(), -1, -0));
   }
 
   /**
