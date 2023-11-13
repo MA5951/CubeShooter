@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems;
+package frc.robot.subsystems.CubeShooter;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.ma5951.utils.subsystem.MotorSubsystem;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.PortMap;
 
 public class Cubeshotter extends SubsystemBase implements MotorSubsystem{
   /** Creates a new Cubeshotter. */
@@ -18,8 +19,8 @@ public class Cubeshotter extends SubsystemBase implements MotorSubsystem{
   private static Cubeshotter instance;
 
   public Cubeshotter() {
-    master = new CANSparkMax(4, MotorType.kBrushless);
-    slave = new CANSparkMax(18, MotorType.kBrushless);
+    master = new CANSparkMax(PortMap.CubeShooter.LeftMotorID, MotorType.kBrushless);
+    slave = new CANSparkMax(PortMap.CubeShooter.RightMototID, MotorType.kBrushless);
 
     master.setIdleMode(IdleMode.kBrake);
     slave.setIdleMode(IdleMode.kBrake);

@@ -1,0 +1,13 @@
+package frc.robot.subsystem.CubeShooter;
+
+
+
+public class CubeShooterCondtants {
+
+    public static final LowFiringPower = 0.8;
+    public static final HighFiringPower = 1;
+
+    public static final IntakePower = -0.5;
+
+
+}
