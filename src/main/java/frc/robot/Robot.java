@@ -9,6 +9,8 @@ import com.ma5951.utils.commands.DefaultControlCommandInSubsystemControl;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.commands.SetPrecent;
 import frc.robot.subsystems.CubeShooter.Cubeshotter;
 
 
@@ -83,6 +85,8 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
     
+    CommandScheduler.getInstance().setDefaultCommand(Cubeshotter.getInstance(), new SetPrecent(0));
+
   }
 
   /** This function is called periodically during operator control. */
