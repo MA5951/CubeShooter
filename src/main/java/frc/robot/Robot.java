@@ -85,7 +85,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
     
-    CommandScheduler.getInstance().setDefaultCommand(Cubeshotter.getInstance(), new SetPrecent(0));
+    //CommandScheduler.getInstance().setDefaultCommand(Cubeshotter.getInstance(), new SetPrecent(0));
 
   }
 
