@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.SetPrecent;
+import frc.robot.commands.Automations.CubeShooter.SetPrecntPID;
 import frc.robot.subsystems.CubeShooter.Cubeshotter;
 import frc.robot.subsystems.CubeShooter.ShooterConstants;
 
@@ -42,8 +42,8 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    ps4Controller.circle().whileTrue(new SetPrecent(1));
-    ps4Controller.triangle().whileTrue(new SetPrecent(-1));
+    ps4Controller.circle().whileTrue(new SetPrecntPID(ShooterConstants.IntakePower));
+    ps4Controller.triangle().whileTrue(new SetPrecntPID(ShooterConstants.HighFiringPower));
 
 
   }
