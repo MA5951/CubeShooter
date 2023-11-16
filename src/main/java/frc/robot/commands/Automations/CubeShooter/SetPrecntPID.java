@@ -5,11 +5,18 @@
 package frc.robot.commands.Automations.CubeShooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.PortMap.CubeShooter;
+import frc.robot.subsystems.CubeShooter.Cubeshotter;
+import frc.robot.subsystems.CubeShooter.ShooterConstants;
 
 public class SetPrecntPID extends CommandBase {
   /** Creates a new SetPrecntPID. */
-  public SetPrecntPID() {
-    // Use addRequirements() here to declare subsystem dependencies.
+  private double Precent;
+  public SetPrecntPID(double precent) {
+    Cubeshotter.getInstance().setSetPoint(ShooterConstants.MaxRPM * precent);
+    Precent = precent;
+    
+    addRequirements(Cubeshotter.getInstance());
   }
 
   // Called when the command is initially scheduled.
@@ -18,11 +25,15 @@ public class SetPrecntPID extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    Cubeshotter.getInstance().calculate(ShooterConstants.MaxRPM * Precent);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    Cubeshotter.getInstance().setVoltage(0);
+  }
 
   // Returns true when the command should end.
   @Override

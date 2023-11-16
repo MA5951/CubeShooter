@@ -7,6 +7,7 @@ package frc.robot;
 import com.ma5951.utils.commands.MotorCommand;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -42,10 +43,11 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    ps4Controller.circle().whileTrue(new SetPrecntPID(ShooterConstants.IntakePower));
-    ps4Controller.triangle().whileTrue(new SetPrecntPID(ShooterConstants.HighFiringPower));
-
-
+    ps4Controller.circle().whileTrue(new SetPrecntPID(0.15));
+    ps4Controller.triangle().whileTrue(new SetPrecntPID(-0.15));
+   
+    ps4Controller.cross().whileTrue(new MotorCommand(Cubeshotter.getInstance(), -0.5, 0));
+    ps4Controller.square().whileTrue(new MotorCommand(Cubeshotter.getInstance(), 0.8, 0));
   }
 
   /**
@@ -54,7 +56,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
+    // An example command will be run in autonomousgi
     return null;
   }
 }

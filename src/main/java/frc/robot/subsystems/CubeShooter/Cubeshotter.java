@@ -9,11 +9,12 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxPIDController.ArbFFUnits;
 import com.ma5951.utils.MAShuffleboard;
-import com.ma5951.utils.MAShuffleboard.pidControllerGainSupplier;
+import com.ma5951.utils.MAShuffleboard.pidControllerGainSupplier; 
 import com.ma5951.utils.subsystem.MotorSubsystem;
 
-
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.PortMap;
 
@@ -26,6 +27,7 @@ public class Cubeshotter extends SubsystemBase implements MotorSubsystem{
   private MAShuffleboard board;
   private pidControllerGainSupplier pidSupplier;
   private double setPoint;
+  private SimpleMotorFeedforward feedforward;
 
   public Cubeshotter() {
     master = new CANSparkMax(PortMap.CubeShooter.LeftMotorID, MotorType.kBrushless);
@@ -37,9 +39,10 @@ public class Cubeshotter extends SubsystemBase implements MotorSubsystem{
     master.setInverted(false);
     slave.follow(master, true);
 
+    feedforward = new SimpleMotorFeedforward(ShooterConstants.Ks, ShooterConstants.Kv);
+
     pidController = master.getPIDController();
     board = new MAShuffleboard("CubeShooter");
-
     pidSupplier = board.getPidControllerGainSupplier(
       ShooterConstants.Kp,
       ShooterConstants.Ki,
@@ -59,7 +62,8 @@ public class Cubeshotter extends SubsystemBase implements MotorSubsystem{
   
   public void calculate(double setPoint) {
     pidController.setReference(
-      setPoint, CANSparkMax.ControlType.kVelocity);
+      setPoint, CANSparkMax.ControlType.kVelocity , 0 , 
+        feedforward.calculate(setPoint), ArbFFUnits.kVoltage);
   }
 
   
@@ -91,12 +95,16 @@ public class Cubeshotter extends SubsystemBase implements MotorSubsystem{
 
   @Override
   public void periodic() {
-    pidController.setP(pidSupplier.getKP());
-    pidController.setI(pidSupplier.getKI());
-    pidController.setD(pidSupplier.getKD());
+    pidController.setP(pidSupplier.getKP() ,0);
+    pidController.setI(pidSupplier.getKI(), 0);
+    pidController.setD(pidSupplier.getKD(), 0);
     
+    board.addNum("", setPoint);
     board.addNum("Shooter RPM", getVelocity());
+    board.addNum("Shooter RPMG", getVelocity());
     board.addNum("SetPoint", getSetPoint());
+
+    
 
   }
 }
