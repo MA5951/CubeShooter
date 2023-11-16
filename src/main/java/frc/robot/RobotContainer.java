@@ -43,11 +43,10 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    ps4Controller.circle().whileTrue(new SetPrecntPID(0.15));
-    ps4Controller.triangle().whileTrue(new SetPrecntPID(-0.15));
-   
-    ps4Controller.cross().whileTrue(new MotorCommand(Cubeshotter.getInstance(), -0.5, 0));
-    ps4Controller.square().whileTrue(new MotorCommand(Cubeshotter.getInstance(), 0.8, 0));
+    ps4Controller.circle().whileTrue(new SetPrecntPID(ShooterConstants.HighFiringPower));
+    ps4Controller.triangle().whileTrue(new SetPrecntPID(ShooterConstants.IntakePower));
+    ps4Controller.cross().whileTrue(new SetPrecntPID(ShooterConstants.LowFiringPower));
+    
   }
 
   /**
