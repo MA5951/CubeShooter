@@ -18,5 +18,15 @@ public class ShooterConstants {
     public static final double Kd = 0;
 
 
+    
+    public static final double goingUpPower = -0.1;
+    public static final double goingDownPower = 0.1;
 
+    public static final int angleMaxRPM = 10;
+    public static final double angleKv = 0;
+    public static final int angleKs = 0;
+
+    public static final double angleKp = 0.02;
+    public static final double angleKi = 0.000000003;
+    public static final double angleKd = 0;
 }

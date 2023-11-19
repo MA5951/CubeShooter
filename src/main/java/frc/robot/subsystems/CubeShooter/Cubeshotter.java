@@ -29,12 +29,23 @@ public class Cubeshotter extends SubsystemBase implements MotorSubsystem{
   private double setPoint;
   private SimpleMotorFeedforward feedforward;
 
+  private SparkMaxPIDController anglePidController;
+  private pidControllerGainSupplier anglePidSupplier;
+  private double angleSetPoint;
+  private SimpleMotorFeedforward angleFeedforward;
+
+  private CANSparkMax angleMotor;
+
   public Cubeshotter() {
     master = new CANSparkMax(PortMap.CubeShooter.LeftMotorID, MotorType.kBrushless);
     slave = new CANSparkMax(PortMap.CubeShooter.RightMototID, MotorType.kBrushless);
 
+    angleMotor = new CANSparkMax(PortMap.CubeShooter.AngleMotorID, MotorType.kBrushless);
+
     master.setIdleMode(IdleMode.kBrake);
     slave.setIdleMode(IdleMode.kBrake);
+
+    angleMotor.setIdleMode(IdleMode.kBrake);
 
     master.setInverted(false);
     slave.follow(master, true);
@@ -52,11 +63,29 @@ public class Cubeshotter extends SubsystemBase implements MotorSubsystem{
     pidController.setP(ShooterConstants.Kp);
     pidController.setI(ShooterConstants.Ki);
     pidController.setD(ShooterConstants.Kd);
+
+
+
+    angleFeedforward = new SimpleMotorFeedforward(ShooterConstants.angleKs, ShooterConstants.angleKv);
     
+    anglePidController = angleMotor.getPIDController();
+    anglePidSupplier = board.getPidControllerGainSupplier(
+      ShooterConstants.Kp,
+      ShooterConstants.Ki,
+      ShooterConstants.Kd
+    );
+
+    anglePidController.setP(ShooterConstants.angleKp);
+    anglePidController.setI(ShooterConstants.angleKi);
+    anglePidController.setD(ShooterConstants.angleKd);
   }
 
   public double getVelocity() {
     return (master.getEncoder().getVelocity() + slave.getEncoder().getVelocity()) / 2;
+  }
+
+  public double getAngleMotorVelocity() {
+    return angleMotor.getEncoder().getVelocity();
   }
 
   
@@ -66,19 +95,35 @@ public class Cubeshotter extends SubsystemBase implements MotorSubsystem{
         feedforward.calculate(setPoint), ArbFFUnits.kVoltage);
   }
 
+  public void angleCalculate(double setPoint) {
+    anglePidController.setReference(
+      setPoint, CANSparkMax.ControlType.kVelocity , 0 , 
+        feedforward.calculate(setPoint), ArbFFUnits.kVoltage);
+  }
   
   public void setSetPoint(double setPoint) {
     this.setPoint = setPoint;
   }
 
+  public void setAngleSetPoint(double setPoint) {
+    this.angleSetPoint = angleSetPoint;
+  }
   
   public double getSetPoint() {
     return setPoint;
   }
 
+  public double getAngleSetPoint() {
+    return angleSetPoint;
+  }
+
+  public void setAngleMotorVoltage(double Voltage) {
+    angleMotor.set(Voltage / 12);
+  }
+
   @Override
   public void setVoltage(double voltage) {
-      master.set(voltage / 12);
+    master.set(voltage / 12);
   }
 
   @Override
@@ -95,16 +140,23 @@ public class Cubeshotter extends SubsystemBase implements MotorSubsystem{
 
   @Override
   public void periodic() {
-    pidController.setP(pidSupplier.getKP() ,0);
-    pidController.setI(pidSupplier.getKI(), 0);
-    pidController.setD(pidSupplier.getKD(), 0);
+    // pidController.setP(pidSupplier.getKP() ,0);
+    // pidController.setI(pidSupplier.getKI(), 0);
+    // pidController.setD(pidSupplier.getKD(), 0);
     
-    board.addNum("", setPoint);
-    board.addNum("Shooter RPM", getVelocity());
-    board.addNum("Shooter RPMG", getVelocity());
-    board.addNum("SetPoint", getSetPoint());
+    // board.addNum("", setPoint);
+    // board.addNum("Shooter RPM", getVelocity());
+    // board.addNum("Shooter RPMG", getVelocity());
+    // board.addNum("SetPoint", getSetPoint());
 
     
-
+    anglePidController.setP(pidSupplier.getKP() ,0);
+    anglePidController.setI(pidSupplier.getKI(), 0);
+    anglePidController.setD(pidSupplier.getKD(), 0);
+    
+    board.addNum("", angleSetPoint);
+    board.addNum("angle motor RPM", getAngleMotorVelocity());
+    board.addNum("angle motor RPMG", getAngleMotorVelocity());
+    board.addNum("angle SetPoint", getAngleSetPoint());
   }
 }
