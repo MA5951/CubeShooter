@@ -3,7 +3,7 @@ package frc.robot.subsystems.CubeShooter;
 public class ShooterConstants {
 
     public static final double LowFiringPower = -0.6;
-    public static final double HighFiringPower = -0.8;
+    public static final double HighFiringPower = -0.75;
 
     public static final double IntakePower = 0.4;
 
